@@ -15,7 +15,7 @@
 	},
 	"keywords": ["scripts", "cli", "weasel"],
 	"author": "Jonathan Sigg",
-	"license": "ISC",
+	"license": "GPL-3.0-only",
 	"packageManager": "pnpm@10.10.0",
 	"devDependencies": {
 		"@types/fs-extra": "^11.0.4",

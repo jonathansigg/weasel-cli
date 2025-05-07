@@ -5,8 +5,10 @@ import { loadConfig } from './helper/config.js';
 const program = new Command();
 loadConfig().then((config) => {
 	program
-		.name('github-runner-cli')
-		.description('A powerful CLI tool for managing GitHub runners')
+		.name('weasel')
+		.description(
+			'Weasel CLI was created for managing custom commands for your projects.\nCreated with ❤️ by @jonathansigg.',
+		)
 		.version('1.0.0')
 		.setOptionValue('config', config);
 

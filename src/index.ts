@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { Command } from '@commander-js/extra-typings';
-import { loadProjectCommands } from './commands/project.js';
+import { loadCustomCommand } from './commands/custom-command.js';
 import { loadConfig } from './helper/config.js';
 const program = new Command();
 loadConfig().then((config) => {
@@ -12,7 +12,7 @@ loadConfig().then((config) => {
 		.version('1.0.0')
 		.setOptionValue('config', config);
 
-	loadProjectCommands(program);
+	loadCustomCommand(program);
 
 	program.parse(process.argv);
 });

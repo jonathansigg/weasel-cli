@@ -4,7 +4,7 @@
 		"weasel": "./dist/index.js"
 	},
 	"version": "1.0.0",
-	"description": "Create custom commands for your projects",
+	"description": "Create custom commands",
 	"main": "index.js",
 	"type": "module",
 	"scripts": {

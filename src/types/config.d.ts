@@ -1,20 +1,21 @@
-export type Command = {
+export type CustomSubCommand = {
 	name: string;
 	description?: string;
-	argument: string;
+	argument?: string;
 	options?: string[];
 	command: string;
 };
-export type Project = {
-	id: string;
+
+export type CustomCommand = {
 	name: string;
 	path: string;
-	commands?: Command[];
-};
-export type Config = {
-	projects?: Project[];
+	description?: string;
+	subcommands?: CustomSubCommand[];
 };
 
-export type TransformArrayToObject<T> = T extends Array<infer U> ? U : T;
+export type Config = {
+	commands?: CustomCommand[];
+};
+
 export type ConfigKeys = keyof Config;
-export type ConfigValues = Config[keyof Config];
+export type ConfigValues = Config[CustomCommand];

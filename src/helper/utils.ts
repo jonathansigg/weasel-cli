@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { normalize } from 'node:path';
 import { exit } from 'node:process';
-import type { Config, Project } from '../types/config.js';
+import type { Config, CustomCommand } from '../types/config.js';
 import { errorLog, messageLog, showMessageLog } from './message.js';
 
 export const checkAndCreateDir = async (dirPath: string) => {
@@ -27,14 +27,12 @@ export const copyDir = async (srcDir: string, destDir: string) => {
 	});
 };
 
-export const startProcess = (
-	command: string,
-	argument: string,
-	options: string[],
-	cwd: string,
-) => {
-	const script = spawn(command, [...options, argument], {
+export const startProcess = (command: string, options: string[], cwd: string) => {
+	messageLog(`Running command: ${command} ${options.join(' ')}`);
+	const script = spawn(command, [...options], {
 		cwd: normalize(cwd),
+		env: process.env,
+		shell: true,
 	});
 
 	script.stdout.on('data', (data) => {
@@ -47,26 +45,28 @@ export const startProcess = (
 	});
 };
 
-export const getProject = async (name?: string, config?: Config): Promise<Project> => {
-	if (!config?.projects?.length) {
-		showMessageLog({ error: 'No projects found' }, { exit: true, exitNumber: 1 });
+export const getProject = async (name?: string, config?: Config): Promise<CustomCommand> => {
+	if (!config?.commands?.length) {
+		showMessageLog({ error: 'No commands found' }, { exit: true, exitNumber: 1 });
 	}
 
-	const projects = config?.projects?.map((p) => ({ value: p.id, name: p.name })) ?? [];
-	const projectName =
+	const customCommands = config?.commands?.map((p) => ({ value: p.name, name: p.name })) ?? [];
+	const customCommandName =
 		name ??
 		(await select({
-			message: 'Select a project to start',
-			choices: projects,
+			message: 'Select a command to start',
+			choices: customCommands,
 		}));
 
-	const project = config?.projects?.find((p) => p.id === projectName) as Project;
-	if (!project) {
+	const customCommand = config?.commands?.find(
+		(p) => p.name === customCommandName,
+	) as CustomCommand;
+	if (!customCommand) {
 		showMessageLog(
-			{ error: `Project ${projectName} not found` },
+			{ error: `Command ${customCommandName} not found` },
 			{ exit: true, exitNumber: 1 },
 		);
 	}
 
-	return project;
+	return customCommand;
 };

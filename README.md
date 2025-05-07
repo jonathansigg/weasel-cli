@@ -1,12 +1,11 @@
 
 # Weasel CLI
 
-Weasel CLI is a powerful command-line tool designed to help you manage and execute custom commands for your projects. It simplifies project workflows by allowing you to define, organize, and run project-specific commands with ease.
+Weasel CLI is a powerful command-line tool designed to help you manage and execute custom commands. It simplifies for example project workflows by allowing you to define, organize, and run project-specific commands with ease.
 
 ## Features
 
-- **Project Management**: Add, update, and delete projects.
-- **Command Management**: Define and execute custom commands for each project.
+- **Command Management**: Define and execute custom commands.
 - **Interactive Prompts**: User-friendly prompts for seamless interaction.
 - **Cross-Platform**: Works on macOS, Linux, and Windows.
 
@@ -26,38 +25,53 @@ weasel --help
 
 ## Usage
 
-Add a New Project
+Add a new command
 
 ```bash
-weasel project add <project-name> --path <project-path>
+weasel add [command] [path]
 ```
 
-- project-name: Name of the project.
-- project-path: Path to the project directory.
+- command: Name your custom command.
+- path: Path to the directory, where to execute your command.
 
-Add a Command to a Project
+Edit your command
 
 ```bash
-weasel project <project-name> add command <command-name> --alias <alias> --description <description> --argument <argument> --options <options> --command <command>
+weasel edit [command]
 ```
 
-- command-name: Name of the command.
-- alias: (Optional) Alias for the command.
-- description: (Optional) Description of the command.
-- argument: Argument for the command.
-- options: (Optional) Options for the command (comma-separated).
-- command: The actual command to execute.
+- command: (Optional) Name your custom command. If not set, it will prompt a selectlist with tour commands.
 
-Execute a Command
+Delete your command
 
 ```bash
-weasel project <project-name> <command-name>
+weasel delete [command]
 ```
 
-Delete a Command
+- command: (Optional) Name your custom command. If not set, it will prompt a selectlist with tour commands.
+
+Add a subcommand to your custom command
 
 ```bash
-weasel project <project-name> delete command <command-name>
+weasel [command] addsub [subcommand] --description <description> --options <options> --argument <argument>
+```
+
+- command: Name of your custom command.
+- subcommand: Name of the subcommand
+- description: (Optional) Description of the subcommand.
+- options: (Optional) Options for the subcommand.
+- argument: (Optional) Argument for the subcommand.
+
+Execute a subcommand
+
+```bash
+weasel <command> <subcommand>
+```
+
+Delete a subcommand
+
+```bash
+weasel <command> deletesub <subcommand>
 ```
 
 ## License

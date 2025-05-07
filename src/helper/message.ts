@@ -1,31 +1,40 @@
 import chalk from 'chalk';
-import type { MessageLogOptions, MessageResponse } from '../types/message';
+import type { MessageIcons, MessageLogOptions, MessageResponse } from '../types/message';
+
+export const messageIcons = {
+	success: '✔',
+	error: '✖',
+	info: 'ℹ',
+	warning: '⚠',
+	debug: '➤',
+	arrow: '➜',
+};
 
 export const successLog = (...message: unknown[]) => {
-	console.log(chalk.green('✔'), ...message);
+	console.log(chalk.green(messageIcons.success), ...message);
 };
 
 export const errorLog = (...message: unknown[]) => {
-	console.log(chalk.red('✖'), ...message);
+	console.log(chalk.red(messageIcons.error), ...message);
 };
 
 export const infoLog = (...message: unknown[]) => {
-	console.log(chalk.blue('ℹ'), ...message);
+	console.log(chalk.blue(messageIcons.info), ...message);
 };
 
 export const warningLog = (...message: unknown[]) => {
-	console.log(chalk.yellow('⚠'), ...message);
+	console.log(chalk.yellow(messageIcons.warning), ...message);
 };
 
 export const debugLog = (...message: unknown[]) => {
-	console.log(chalk.gray('➤'), ...message);
+	console.log(chalk.gray(messageIcons.debug), ...message);
 };
 
 export const messageLog = (...message: unknown[]) => {
 	console.log(...message);
 };
 
-export const iconLog = (icon: string, ...message: unknown[]) => {
+export const iconLog = (icon: MessageIcons, ...message: unknown[]) => {
 	console.log(chalk.gray(icon), ...message);
 };
 

@@ -25,6 +25,10 @@ export const messageLog = (...message: unknown[]) => {
 	console.log(...message);
 };
 
+export const iconLog = (icon: string, ...message: unknown[]) => {
+	console.log(chalk.gray(icon), ...message);
+};
+
 export const breakLineLog = () => {
 	console.log(chalk.gray('\n──────────────────────────────────────────────\n'));
 };

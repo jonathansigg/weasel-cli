@@ -1,12 +1,38 @@
 import type { Command } from '@commander-js/extra-typings';
 import { input, select } from '@inquirer/prompts';
+import chalk from 'chalk';
 import { saveCommandConfig, saveConfig } from '../helper/config.js';
-import { showMessageLog, successLog } from '../helper/message.js';
+import { iconLog, showMessageLog, successLog } from '../helper/message.js';
 import { startProcess } from '../helper/utils.js';
 import type { Config, Project } from '../types/config.js';
 
 export const loadProjectCommands = (program: Command) => {
 	const config = program.getOptionValue('config') as Config;
+
+	program
+		.command('projects')
+		.description('Projects')
+		.command('list')
+		.alias('l')
+		.description('List all projects')
+
+		.action(() => {
+			const projects = config?.projects?.map((p) => p.name) ?? [];
+			if (!projects?.length) {
+				showMessageLog({ error: 'No projects found' }, { exit: true, exitNumber: 1 });
+			}
+
+			for (const p of config?.projects ?? []) {
+				iconLog(
+					chalk.green('➜'),
+					`${p.name}`,
+					'|',
+					chalk.blue('Commands:'),
+					p?.commands?.map((c) => c.name).join(', '),
+				);
+			}
+		});
+
 	const project = program.command('project').description('Manage projects');
 
 	project
@@ -101,56 +127,28 @@ export const loadProjectCommands = (program: Command) => {
 			.alias('c')
 			.description('add a new command to project')
 			.argument('<name>', 'Name of the command')
-			.option('--alias, -l <l>', 'Project command description')
 			.option('--description, -d <d>', 'Project command description')
 			.option('--argument, -a <a>', 'Project command argument')
 			.option('--options, -o <o>', 'Project command options')
-			.option('--command, -c <c>', 'Project command')
-			.action(async (name, { l, d, a, o, c }) => {
-				if (p?.commands?.find((c) => c.alias === l)) {
-					showMessageLog({ error: `Alias ${l} already exists` }, { exit: true, exitNumber: 1 });
-				}
-
+			.option(
+				'--command, -c <c>',
+				'Project command. For multiple commands, use comma (,) to separate them',
+			)
+			.action(async (name, { d, a, o, c }) => {
+				c = c ? c.replaceAll(',', ' ') : undefined;
 				const command = {
 					name,
-					alias:
-						l ??
-						(await input({
-							message: 'Enter the command alias. Leave empty for no alias:',
-							default: '',
-							validate: (value) => {
-								if (value.includes(' ')) {
-									return 'Argument cannot contain spaces';
-								}
-								if (p?.commands?.find((c) => c.alias === value)) {
-									return `Alias already exists. Aliases in use: ${p?.commands.map((c) => c.alias).join(', ')}. Choose another alias.`;
-								}
-								return true;
-							},
-						})),
 					description:
 						d ??
 						(await input({
 							message: 'Enter the command description. Leave empty for no description:',
 							default: '',
-							validate: (value) => {
-								if (value.includes(' ')) {
-									return 'Argument cannot contain spaces';
-								}
-								return true;
-							},
 						})),
 					argument:
 						a ??
 						(await input({
 							message: 'Enter argument for the command:',
 							required: true,
-							validate: (value) => {
-								if (value.includes(' ')) {
-									return 'Argument cannot contain spaces';
-								}
-								return true;
-							},
 						})),
 					options:
 						o ??
@@ -180,7 +178,6 @@ export const loadProjectCommands = (program: Command) => {
 
 				const newCommand = {
 					name: command.name,
-					alias: command.alias === '' ? undefined : command.alias,
 					description: command.description === '' ? undefined : command.description,
 					argument: command.argument,
 					options: command.options === '' ? undefined : command.options.split(','),
@@ -193,9 +190,6 @@ export const loadProjectCommands = (program: Command) => {
 
 		for (const c of p?.commands ?? []) {
 			const subProjectCommand = projectCommand.command(c.name);
-			if (c?.alias) {
-				subProjectCommand.alias(c.alias);
-			}
 
 			if (c?.description) {
 				subProjectCommand.description(c.description);

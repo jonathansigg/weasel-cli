@@ -5,7 +5,7 @@ inputs:
   registry-url:
     description: 'Registry url'
     required: true
-  scopes:
+  scope:
     description: 'Scope'
     default: ''
 

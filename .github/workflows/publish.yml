@@ -1,24 +1,24 @@
-name: Publish NPM package
-
+name: Publish Package to npmjs
 on:
-  push:
-    branches:
-      - main
-
+  release:
+    types: [published]
 jobs:
-    publish:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+        - uses: actions/checkout@v4
           with:
             fetch-depth: 0
         
         - name: Setup Node.js
-          uses: actions/setup-node@v2
+          uses: actions/setup-node@v4
           with:
-            node-version: '20'
-            registry-url: 'https://npm.pkg.github.com/'
-            scope: '@weasel-scripts'
+            node-version: '20.x'
+            registry-url: 'https://npm.pkg.github.com'
+            scope: '@octocat'
         - name: Setup pnpm
           run: npm install -g pnpm
 
@@ -32,6 +32,6 @@ jobs:
           run: pnpm build
         
         - name: Publish
-          run: npm publish --access public --no-git-checks
+          run: npm publish
           env:
             NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

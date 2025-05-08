@@ -14,7 +14,7 @@ Weasel CLI is a powerful command-line tool designed to help you manage and execu
 Install the package globally using npm:
 
 ```bash
-npm install -g weasel
+npm install -g @weasel-scripts/cli
 ```
 
 Verify the installation

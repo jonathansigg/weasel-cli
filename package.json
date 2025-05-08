@@ -1,7 +1,7 @@
 {
 	"name": "weasel-cli",
 	"bin": {
-		"weasel": "./dist/index.js"
+		"weasel": "dist/index.js"
 	},
 	"version": "1.2.10",
 	"description": "Create custom commands",
@@ -31,7 +31,7 @@
 	"packageManager": "pnpm@10.10.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/weasel-scripts/weasel-cli"
+		"url": "git+https://github.com/weasel-scripts/weasel-cli.git"
 	},
 	"homepage": "https://github.com/weasel-scripts/weasel-cli",
 	"devDependencies": {

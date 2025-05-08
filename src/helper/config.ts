@@ -110,12 +110,19 @@ export const deleteConfig = async (
 		delete config[key];
 	}
 
+	const _keyName = keyName ?? 'name';
+
 	try {
 		fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+		const configItem = config[key].at(index ?? 0);
+		const configItemValue =
+			configItem && typeof configItem === 'object' && _keyName in configItem
+				? configItem[keyName as keyof typeof configItem]
+				: undefined;
 		return {
 			success:
-				index !== undefined
-					? `${config[key][index]?.[keyName ?? 'name'] ?? 'unknown'} ${key} successfully deleted`
+				configItemValue !== undefined
+					? `${configItemValue} ${key} successfully deleted`
 					: `Config deleted: ${key}`,
 		};
 	} catch {

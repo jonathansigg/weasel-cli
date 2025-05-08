@@ -18,4 +18,4 @@ export type Config = {
 };
 
 export type ConfigKeys = keyof Config;
-export type ConfigValues = Config[CustomCommand];
+export type ConfigValues = keyof CustomCommand;

@@ -288,8 +288,11 @@ export const loadCustomCommand = (program: Command) => {
 				.command(scm.name)
 				.description(scm?.description ?? '');
 
+			const options = scm.options ?? [];
+			const argument = scm?.argument?.split(' ') ?? [];
+
 			subProjectCommand.action(async () => {
-				startProcess(scm.command, scm.options ?? [], cm.path);
+				startProcess(scm.command, [...options, ...argument], cm.path);
 			});
 		}
 	}

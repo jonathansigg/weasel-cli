@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://github.com/jonathansigg/weasel-cli/compare/v1.2.4...v1.2.5) (2025-05-08)
+
+
+### Bug Fixes
+
+* **package:** set correct secret token for github action ([127cfa2](https://github.com/jonathansigg/weasel-cli/commit/127cfa2b6d70f2b1d78907145b46e39badaa5d1c))
+
 ### [1.2.4](https://github.com/jonathansigg/weasel-cli/compare/v1.2.3...v1.2.4) (2025-05-08)
 
 

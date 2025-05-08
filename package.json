@@ -9,11 +9,9 @@
 	"type": "module",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/@jonathansigg",
+		"registry": "https://npm.pkg.github.com/@weasel-scripts",
 		"access": "public",
 		"tag": "latest"
 	},
@@ -26,19 +24,15 @@
 		"weasel": "node ./dist/index.js",
 		"release": "standard-version && git push --follow-tags origin main"
 	},
-	"keywords": [
-		"scripts",
-		"cli",
-		"weasel"
-	],
+	"keywords": ["scripts", "cli", "weasel"],
 	"author": "Jonathan Sigg",
 	"license": "GPL-3.0-only",
 	"packageManager": "pnpm@10.10.0",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/jonathansigg/weasel-cli"
+		"url": "https://github.com/weasel-scripts/weasel-cli"
 	},
-	"homepage": "https://github.com/jonathansigg/weasel-cli",
+	"homepage": "https://github.com/weasel-scripts/weasel-cli",
 	"devDependencies": {
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^22.15.16",

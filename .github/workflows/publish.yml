@@ -1,0 +1,45 @@
+name: Publish Package
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  buildAndPublishNpmjs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Build and test
+          uses: ./.github/actions/build
+          with:
+            registry-url: 'https://registry.npmjs.org'
+        
+        - run: npm publish --provenance --access public
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  buildAndPublishGitHub:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+
+        - name: Build and test
+          uses: ./.github/actions/build
+          with:
+            registry-url: 'https://npm.pkg.github.com'
+            scope: '@weasel-scripts'
+        
+        - run: npm publish --provenance --access public
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

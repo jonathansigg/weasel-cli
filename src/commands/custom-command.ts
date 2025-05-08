@@ -70,8 +70,8 @@ export const loadCustomCommand = (program: Command) => {
 		.alias('e')
 		.description('Edit command')
 		.option('--description, -d <d>', 'Edit command description')
-		.option('--path, -p <p>', 'Edit command description')
-		.arguments('[name]')
+		.option('--path, -p <p>', 'Edit command path')
+		.argument('[name]', 'Name of the command')
 		.action(async (_name, { p, d }) => {
 			if (!customCommands?.length) {
 				showMessageLog({ error: 'No commands found' }, { exit: true, exitNumber: 1 });
@@ -117,7 +117,7 @@ export const loadCustomCommand = (program: Command) => {
 		.command('delete')
 		.alias('d')
 		.description('Delete command')
-		.arguments('[name]')
+		.argument('[name]', 'Name of the command')
 		.action(async (_name) => {
 			if (!customCommands?.length) {
 				showMessageLog({ error: 'No commands found' }, { exit: true, exitNumber: 1 });
@@ -154,7 +154,8 @@ export const loadCustomCommand = (program: Command) => {
 		});
 
 	for (const cm of config?.commands ?? []) {
-		const customCommand = program.command(cm.name);
+		const customCommand = program.command(cm.name).description(cm?.description ?? '');
+
 		const addCommand = customCommand
 			.command('addsub')
 			.alias('as')
@@ -163,9 +164,9 @@ export const loadCustomCommand = (program: Command) => {
 		const deleteCommand = customCommand
 			.command('deletesub')
 			.alias('ds')
-			.description(`Add new subcommand for ${cm.name}`);
+			.description(`Delete subcommand for ${cm.name}`);
 
-		deleteCommand.argument('[name]', 'Name of the command').action(async (name) => {
+		deleteCommand.argument('[name]', 'Name of the subcommand').action(async (name) => {
 			if (!cm?.subcommands?.length) {
 				showMessageLog({ error: 'No commands found' }, { exit: true, exitNumber: 1 });
 			}
@@ -209,14 +210,11 @@ export const loadCustomCommand = (program: Command) => {
 		});
 
 		addCommand
-			.argument('[name]', 'Name of the command')
-			.option('--description, -d <d>', 'Project command description')
-			.option('--argument, -a <a>', 'Project command argument')
-			.option('--options, -o <o>', 'Project command options')
-			.option(
-				'--command, -c <c>',
-				'Project command. For multiple commands, use comma (,) to separate them',
-			)
+			.argument('[name]', 'Name of the subcommand')
+			.option('--description, -d <d>', 'Subcommand description')
+			.option('--argument, -a <a>', 'Subcommand argument')
+			.option('--options, -o <o>', 'Subcommand options')
+			.option('--command, -c <c>', 'Subcommand name')
 			.action(async (_name, { d, a, o, c }) => {
 				c = c ? c.replaceAll(',', ' ') : undefined;
 				const command = {
@@ -286,11 +284,9 @@ export const loadCustomCommand = (program: Command) => {
 			});
 
 		for (const scm of cm?.subcommands ?? []) {
-			const subProjectCommand = customCommand.command(scm.name);
-
-			if (scm?.description) {
-				subProjectCommand.description(scm.description);
-			}
+			const subProjectCommand = customCommand
+				.command(scm.name)
+				.description(scm?.description ?? '');
 
 			subProjectCommand.action(async () => {
 				startProcess(scm.command, scm.options ?? [], cm.path);

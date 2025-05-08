@@ -8,6 +8,7 @@ import { errorLog, messageLog, showMessageLog } from 'message';
 import { mkdirp } from 'mkdirp';
 import { version } from 'package';
 import type { Config, CustomCommand } from 'types/config';
+import type { MessageResponse } from 'types/message';
 
 export const getAppVersion = (): string => version;
 
@@ -20,13 +21,19 @@ export const checkAndCreateDir = async (dirPath: string) => {
 	return false;
 };
 
-export const copyDir = async (srcDir: string, destDir: string) => {
-	if (!existsSync(srcDir)) {
-		throw new Error(`Source directory does not exist: ${srcDir}`);
-	}
+export const copyDir = async (srcDir: string, destDir: string): Promise<MessageResponse> => {
+	return new Promise((resolve) => {
+		if (!existsSync(srcDir)) {
+			return resolve({ error: `Source directory does not exist: ${srcDir}` });
+		}
 
-	copy(srcDir, destDir, { overwrite: true }, (err) => {
-		if (err) throw new Error(`Error moving directory: ${err.message}`);
+		copy(srcDir, destDir, { overwrite: true }, (err) => {
+			if (err) {
+				return resolve({ error: `Error moving directory: ${err.message}` });
+			}
+
+			return resolve({ success: `Directory moved from ${srcDir} to ${destDir}` });
+		});
 	});
 };
 
@@ -46,30 +53,4 @@ export const startProcess = (command: string, options: string[], cwd: string) =>
 		errorLog(error);
 		exit(1);
 	});
-};
-
-export const getProject = async (name?: string, config?: Config): Promise<CustomCommand> => {
-	if (!config?.commands?.length) {
-		showMessageLog({ error: 'No commands found' }, { exit: true, exitNumber: 1 });
-	}
-
-	const customCommands = config?.commands?.map((p) => ({ value: p.name, name: p.name })) ?? [];
-	const customCommandName =
-		name ??
-		(await select({
-			message: 'Select a command to start',
-			choices: customCommands,
-		}));
-
-	const customCommand = config?.commands?.find(
-		(p) => p.name === customCommandName,
-	) as CustomCommand;
-	if (!customCommand) {
-		showMessageLog(
-			{ error: `Command ${customCommandName} not found` },
-			{ exit: true, exitNumber: 1 },
-		);
-	}
-
-	return customCommand;
 };

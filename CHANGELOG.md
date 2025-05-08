@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.14](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.13...v1.2.14) (2025-05-08)
+
+
+### Bug Fixes
+
+* **package:** adjust package name ([c70f3c1](https://github.com/weasel-scripts/weasel-cli/commit/c70f3c17c27f3a848f8b8a2bc2d5385fd5772023))
+* **package:** publish package to npmjs ([6ffc6c9](https://github.com/weasel-scripts/weasel-cli/commit/6ffc6c96720349e0d059672972320cd680f80444))
+
 ### [1.2.13](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.12...v1.2.13) (2025-05-08)
 
 

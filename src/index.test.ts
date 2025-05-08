@@ -1,7 +1,6 @@
 import { Command } from '@commander-js/extra-typings';
-import { type Mock, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { loadCustomCommand } from './commands/custom-command';
-import { loadConfig } from './helper/config';
 
 const mocks = vi.hoisted(() => ({
 	command: {

@@ -1,5 +1,4 @@
-import { stringify } from 'node:querystring';
-import { afterEach, mock } from 'node:test';
+import { afterEach } from 'node:test';
 import { describe, expect, test, vi } from 'vitest';
 import {
 	configDirPath,

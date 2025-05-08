@@ -1,6 +1,6 @@
-import { afterEach, mock } from 'node:test';
+import { afterEach } from 'node:test';
 import { Command, type CommandUnknownOpts } from '@commander-js/extra-typings';
-import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { loadCustomCommand } from './custom-command';
 
 const mocks = vi.hoisted(() => {

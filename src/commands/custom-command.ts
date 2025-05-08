@@ -1,10 +1,10 @@
 import type { Command } from '@commander-js/extra-typings';
 import { confirm, input, select } from '@inquirer/prompts';
 import chalk from 'chalk';
-import { deleteConfig, saveCommandConfig, saveConfig } from '../helper/config.js';
-import { messageIcons, showMessageLog, successLog } from '../helper/message.js';
-import { startProcess } from '../helper/utils.js';
-import type { Config, CustomCommand } from '../types/config.js';
+import { deleteConfig, saveCommandConfig, saveConfig } from 'config';
+import { messageIcons, showMessageLog, successLog } from 'message';
+import type { Config, CustomCommand } from 'types/config.js';
+import { startProcess } from 'utils';
 
 export const loadCustomCommand = (program: Command) => {
 	const config = program.getOptionValue('config') as Config;
@@ -19,7 +19,9 @@ export const loadCustomCommand = (program: Command) => {
 		.action(async (_name, _path, { d }) => {
 			if (customCommands?.find((p) => p?.name === _name)) {
 				showMessageLog(
-					{ error: `Command name ${_name} already exists. Please choose a different name.` },
+					{
+						error: `Command name ${_name} already exists. Please choose a different name.`,
+					},
 					{ exit: true, exitNumber: 1 },
 				);
 			}
@@ -129,7 +131,9 @@ export const loadCustomCommand = (program: Command) => {
 				}));
 
 			const deleteCommand = await confirm({
-				message: `${chalk.red(`${messageIcons.warning} WARNING`)}\nAre you sure you want to delete command ${name}? This action cannot be undone`,
+				message: `${chalk.red(
+					`${messageIcons.warning} WARNING`,
+				)}\nAre you sure you want to delete command ${name}? This action cannot be undone`,
 				default: false,
 			});
 
@@ -175,7 +179,11 @@ export const loadCustomCommand = (program: Command) => {
 				})) ?? [];
 
 			const commandName =
-				name ?? (await select({ message: 'Enter the command name', choices: commandChoices }));
+				name ??
+				(await select({
+					message: 'Enter the command name',
+					choices: commandChoices,
+				}));
 
 			if (projectIndex < 0) {
 				showMessageLog(

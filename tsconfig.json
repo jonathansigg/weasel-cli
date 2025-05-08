@@ -1,5 +1,5 @@
 {
-	"include": ["src"],
+	"include": ["src", "types"],
 	"exclude": ["**/*.test.ts"],
 	"compilerOptions": {
 		"module": "esnext",
@@ -11,6 +11,16 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"outDir": "dist",
-		"rootDir": "src"
+		"rootDir": "src",
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"types/*": ["types/*"],
+			"package": ["package.json"],
+			"utils": ["src/helper/utils"],
+			"config": ["src/helper/config"],
+			"message": ["src/helper/message"],
+			"commands/*": ["src/commands/*"]
+		}
 	}
 }

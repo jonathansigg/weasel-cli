@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import type { Config, ConfigKeys, ConfigValues, CustomSubCommand } from '../types/config.js';
-import type { MessageResponse } from '../types/message.js';
-import { checkAndCreateDir } from './utils.js';
+import type { Config, ConfigKeys, ConfigValues, CustomSubCommand } from 'types/config';
+import type { MessageResponse } from 'types/message';
+import { checkAndCreateDir } from 'utils';
 
 // Path to the config file in the user's home directory
 export const configDirPath = path.join(os.homedir(), '.weasel');

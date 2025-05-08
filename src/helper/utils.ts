@@ -1,12 +1,15 @@
-import { select } from '@inquirer/prompts';
-import { copy } from 'fs-extra';
-import { mkdirp } from 'mkdirp';
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { normalize } from 'node:path';
 import { exit } from 'node:process';
-import type { Config, CustomCommand } from '../types/config.js';
-import { errorLog, messageLog, showMessageLog } from './message.js';
+import { select } from '@inquirer/prompts';
+import { copy } from 'fs-extra';
+import { errorLog, messageLog, showMessageLog } from 'message';
+import { mkdirp } from 'mkdirp';
+import { version } from 'package';
+import type { Config, CustomCommand } from 'types/config';
+
+export const getAppVersion = (): string => version;
 
 export const checkAndCreateDir = async (dirPath: string) => {
 	if (existsSync(dirPath)) {

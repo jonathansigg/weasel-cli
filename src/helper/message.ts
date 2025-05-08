@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import type { MessageIcons, MessageLogOptions, MessageResponse } from '../types/message';
+import type { MessageIcons, MessageLogOptions, MessageResponse } from 'types/message';
 
 export const messageIcons = {
 	success: '✔',

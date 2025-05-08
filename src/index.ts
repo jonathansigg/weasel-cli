@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { Command } from '@commander-js/extra-typings';
-import { loadCustomCommand } from './commands/custom-command.js';
-import { loadConfig } from './helper/config.js';
+import { loadCustomCommand } from 'commands/custom-command';
+import { loadConfig } from 'config';
+import { getAppVersion } from 'utils';
 const program = new Command();
 loadConfig().then((config) => {
 	program
@@ -9,7 +10,7 @@ loadConfig().then((config) => {
 		.description(
 			'Weasel CLI was created for managing custom commands for your projects.\nCreated with ❤️ by @jonathansigg.',
 		)
-		.version('1.0.0')
+		.version(getAppVersion())
 		.setOptionValue('config', config);
 
 	loadCustomCommand(program);

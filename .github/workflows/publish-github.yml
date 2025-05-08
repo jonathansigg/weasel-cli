@@ -1,10 +1,10 @@
-name: Publish Package to npmjs
+name: Publish Package to GitHub
 on:
   push:
     branches:
       - main
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read

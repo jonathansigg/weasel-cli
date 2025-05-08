@@ -35,6 +35,7 @@
 	},
 	"homepage": "https://github.com/weasel-scripts/weasel-cli",
 	"devDependencies": {
+		"@inquirer/testing": "^2.1.46",
 		"@types/fs-extra": "^11.0.4",
 		"@types/node": "^22.15.16",
 		"standard-version": "^9.5.0",

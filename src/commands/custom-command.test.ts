@@ -1,5 +1,7 @@
 import { afterEach } from 'node:test';
 import { Command, type CommandUnknownOpts } from '@commander-js/extra-typings';
+import { confirm, input, select } from '@inquirer/prompts';
+import { render } from '@inquirer/testing';
 import { describe, expect, test, vi } from 'vitest';
 import { loadCustomCommand } from './custom-command';
 
@@ -51,27 +53,43 @@ const mocks = vi.hoisted(() => {
 	};
 	return {
 		config,
-		command: {
-			command: vi.fn().mockReturnThis(),
-			name: vi.fn().mockReturnThis(),
-			alias: vi.fn().mockReturnThis(),
-			option: vi.fn().mockReturnThis(),
-			argument: vi.fn().mockReturnThis(),
-			arguments: vi.fn().mockReturnThis(),
-			description: vi.fn().mockReturnThis(),
-			version: vi.fn().mockReturnThis(),
-			parse: vi.fn().mockReturnThis(),
-			setOptionValue: vi.fn().mockReturnThis(),
-			action: vi.fn().mockReturnThis(),
-			getOptionValue: vi.fn().mockReturnValue(config),
+		process: {
+			exit: vi.fn(),
 		},
+		inquirer: {
+			confirm: vi.fn((fn) => fn).mockReturnThis(),
+			input: vi.fn((fn) => fn),
+			select: vi.fn((fn) => fn),
+		},
+		conf: {
+			saveConfig: vi.fn(),
+			saveCommandConfig: vi.fn(),
+			deleteConfig: vi.fn(),
+		},
+	};
+});
+
+vi.mock('process', async (importOriginal) => {
+	const actual = (await importOriginal()) as typeof process;
+	return {
+		...actual,
+		exit: mocks.process.exit,
+	};
+});
+
+vi.mock('@inquirer/prompts', async (importOriginal) => {
+	const actual = (await importOriginal()) as typeof import('@inquirer/prompts');
+	return {
+		...actual,
+		// confirm: mocks.inquirer.confirm(actual.confirm),
+		// input: mocks.inquirer.input(actual.input),
+		// select: mocks.inquirer.select(actual.select),
 	};
 });
 
 const programMock = vi.hoisted(() => async () => {
 	const { Command } = await import('@commander-js/extra-typings');
 	const program = new Command();
-	program.getOptionValue = mocks.command.getOptionValue;
 	return program;
 });
 
@@ -82,14 +100,34 @@ vi.mock('@commander-js/extra-typings', async () => {
 	};
 });
 
+vi.mock('../helper/message', () => {
+	return { successLog: vi.fn() };
+});
+
+vi.mock('../helper/config', () => {
+	return {
+		saveConfig: mocks.conf.saveConfig,
+		saveCommandConfig: mocks.conf.saveCommandConfig,
+		deleteConfig: mocks.conf.deleteConfig,
+	};
+});
+
 describe('custom command', () => {
+	const program = new Command();
+	program
+		.name('weasel')
+		.description(
+			'Weasel CLI was created for managing custom commands for your projects.\nCreated with ❤️ by @jonathansigg.',
+		)
+		.version('1.0.0')
+		.setOptionValue('config', mocks.config);
+	loadCustomCommand(program);
+
 	afterEach(() => {
 		vi.clearAllMocks();
 	});
 
 	describe('loadCustomCommand()', () => {
-		const program = new Command();
-		loadCustomCommand(program);
 		test('should call getOptionValue to retrieve config', () => {
 			expect(program.getOptionValue('config')).toEqual(mocks.config);
 		});
@@ -237,4 +275,18 @@ describe('custom command', () => {
 			);
 		});
 	});
+
+	// describe('command actions', () => {
+	// 	describe('add command', () => {
+	// 		test('should call action with correct arguments', async () => {
+	// 			const p = await program.parseAsync(['node', 'weasel', 'add']);
+
+	// 			const { answer, events, getScreen } = await render(p, {
+	// 				message: 'Enter the command name',
+	// 			});
+
+	// 			events.type('test');
+	// 		});
+	// 	});
+	// });
 });

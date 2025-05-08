@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.13](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.12...v1.2.13) (2025-05-08)
+
+
+### Bug Fixes
+
+* **package:** adjust package name ([da79660](https://github.com/weasel-scripts/weasel-cli/commit/da79660768114cd87096a0a01e0635500bb92ce9))
+
 ### [1.2.12](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.11...v1.2.12) (2025-05-08)
 
 

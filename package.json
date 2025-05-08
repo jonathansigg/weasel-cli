@@ -9,14 +9,7 @@
 	"type": "module",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/@weasel-scripts",
-		"access": "public",
-		"tag": "latest"
-	},
+	"files": ["dist"],
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch",
@@ -26,11 +19,7 @@
 		"weasel": "node ./dist/index.js",
 		"release": "standard-version && git push --follow-tags origin main"
 	},
-	"keywords": [
-		"scripts",
-		"cli",
-		"weasel"
-	],
+	"keywords": ["scripts", "cli", "weasel"],
 	"author": "Jonathan Sigg",
 	"license": "GPL-3.0-only",
 	"packageManager": "pnpm@10.10.0",

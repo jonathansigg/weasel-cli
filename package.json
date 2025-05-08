@@ -1,5 +1,5 @@
 {
-	"name": "@weasel-scripts/weasel-cli",
+	"name": "@weasel-scripts/cli",
 	"bin": {
 		"weasel": "dist/index.js"
 	},

@@ -16,8 +16,7 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"link-cli": "pnpm unlink && pnpm link",
-		"weasel": "node ./dist/index.js",
-		"changeset": "pnpx @changesets/cli"
+		"weasel": "node ./dist/index.js"
 	},
 	"keywords": ["scripts", "cli", "weasel"],
 	"author": "Jonathan Sigg",

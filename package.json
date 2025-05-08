@@ -3,7 +3,7 @@
 	"bin": {
 		"weasel": "./dist/index.js"
 	},
-	"version": "1.2.7",
+	"version": "1.2.8",
 	"description": "Create custom commands",
 	"main": "index.js",
 	"type": "module",

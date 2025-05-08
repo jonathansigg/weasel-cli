@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.14...v1.3.0) (2025-05-08)
+
+
+### Features
+
+* **unit-testing:** create more tests for custom-commands ([2e9eba3](https://github.com/weasel-scripts/weasel-cli/commit/2e9eba37230ce16d20eacf080f098457ee391bfc))
+* **unit-tests:** create unit tests for config ([eac5d42](https://github.com/weasel-scripts/weasel-cli/commit/eac5d42079b86554583855e8067e4b868debd074))
+
 ### [1.2.14](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.13...v1.2.14) (2025-05-08)
 
 

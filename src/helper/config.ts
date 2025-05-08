@@ -1,26 +1,23 @@
-import fs from 'node:fs';
-import os from 'node:os';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import path from 'node:path';
 import type { Config, ConfigKeys, ConfigValues, CustomSubCommand } from 'types/config';
 import type { MessageResponse } from 'types/message';
 import { checkAndCreateDir } from 'utils';
 
-// Path to the config file in the user's home directory
-export const configDirPath = path.join(os.homedir(), '.weasel');
+export const configDirPath = path.join(homedir(), '.weasel');
 export const configPath = path.join(configDirPath, 'config.json');
 
-// Load existing config or initialize empty
 export const loadConfig = async (): Promise<Config> => {
 	await checkAndCreateDir(configDirPath);
 
 	try {
-		return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+		return JSON.parse(readFileSync(configPath, 'utf-8'));
 	} catch (error) {
 		return {};
 	}
 };
 
-// Save config back to file
 export const saveConfig = async <K extends ConfigKeys>(
 	key: K,
 	value: Config[K],
@@ -31,7 +28,7 @@ export const saveConfig = async <K extends ConfigKeys>(
 		for (const item of value) {
 			if (id && item?.[id] === undefined) {
 				return {
-					error: `Value must have a property '${String(id)}': ${key} = ${JSON.stringify(value)}`,
+					error: `Value must have a property '${String(id)}'`,
 				};
 			}
 
@@ -54,31 +51,31 @@ export const saveConfig = async <K extends ConfigKeys>(
 	}
 
 	try {
-		fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-		return { success: 'New config saved' };
+		writeFileSync(configPath, JSON.stringify(config, null, 2));
+		return { success: `New config saved to ${key}` };
 	} catch (e) {
 		return { error: `Failed to save config: ${key} = ${JSON.stringify(value)}` };
 	}
 };
 
 export const saveCommandConfig = async (
-	projectName: string,
+	commandName: string,
 	command: CustomSubCommand,
 ): Promise<MessageResponse> => {
 	const config = await loadConfig();
 	if (!config?.commands?.length) {
-		return { error: 'No projects found' };
+		return { error: 'No Commands found' };
 	}
-	const projectIndex = config.commands?.findIndex((p) => p.name === projectName) ?? -1;
-	if (projectIndex < 0 || config.commands[projectIndex] === undefined) {
-		return { error: `Project ${projectName} not found` };
+	const commandIndex = config.commands?.findIndex((p) => p.name === commandName) ?? -1;
+	if (commandIndex < 0 || config.commands[commandIndex] === undefined) {
+		return { error: `Command ${commandName} not found` };
 	}
-	Object.assign(config.commands[projectIndex], {
-		name: projectName,
+	Object.assign(config.commands[commandIndex], {
+		name: commandName,
 	});
 
-	config.commands[projectIndex].subcommands = [
-		...(config.commands[projectIndex]?.subcommands ?? []),
+	config.commands[commandIndex].subcommands = [
+		...(config.commands[commandIndex]?.subcommands ?? []),
 		command,
 	];
 
@@ -89,9 +86,10 @@ export const saveCommandConfig = async (
 export const deleteConfig = async (
 	key: ConfigKeys,
 	index?: number,
-	keyName?: string,
+	keyName?: string | null,
 ): Promise<MessageResponse> => {
 	const config = await loadConfig();
+	let configValue = '';
 	if (!config[key]) {
 		return { error: `Config not found: ${key}` };
 	}
@@ -102,7 +100,15 @@ export const deleteConfig = async (
 		}
 
 		if (index < 0 || index >= config[key].length) {
-			return { error: `Index out of bounds: ${key}[${index}]` };
+			return { error: `Index ${index} out of bounds` };
+		}
+
+		const deletedConfig = config[key].at(index);
+		const _keyName = (keyName ?? '') as ConfigValues;
+		if (deletedConfig === undefined || !(_keyName in deletedConfig)) {
+			return { error: `Command identifier ${_keyName} does not exist` };
+		} else {
+			configValue = deletedConfig[_keyName] as string;
 		}
 
 		config[key].splice(index, 1);
@@ -110,20 +116,13 @@ export const deleteConfig = async (
 		delete config[key];
 	}
 
-	const _keyName = keyName ?? 'name';
-
 	try {
-		fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-		const configItem = config[key].at(index ?? 0);
-		const configItemValue =
-			configItem && typeof configItem === 'object' && _keyName in configItem
-				? configItem[keyName as keyof typeof configItem]
-				: undefined;
+		writeFileSync(configPath, JSON.stringify(config, null, 2));
 		return {
 			success:
-				configItemValue !== undefined
-					? `${configItemValue} ${key} successfully deleted`
-					: `Config deleted: ${key}`,
+				configValue === ''
+					? `Config deleted: ${key}`
+					: `Command ${configValue} deleted from ${key}`,
 		};
 	} catch {
 		return { error: `Failed to delete config: ${key}` };

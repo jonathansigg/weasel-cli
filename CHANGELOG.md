@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.12](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.11...v1.2.12) (2025-05-08)
+
+
+### Bug Fixes
+
+* **package:** Only push to npmjs ([e54bb4b](https://github.com/weasel-scripts/weasel-cli/commit/e54bb4b5d6c4953908b801ef1ff3f9cae204c0df))
+
 ### [1.2.11](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.10...v1.2.11) (2025-05-08)
 
 ### [1.2.10](https://github.com/weasel-scripts/weasel-cli/compare/v1.2.9...v1.2.10) (2025-05-08)
